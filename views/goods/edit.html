@@ -1,0 +1,140 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form class="form-horizontal" id="goods-form" role="form" action="/goods/save" method="POST">
+				{{ if .goods.Id }}<input type="hidden" name="id" value="{{ .goods.Id }}" >{{ end }}
+				<div class="form-group">
+					<label for="goods-name" class="col-sm-2 control-label">
+						商品名称
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="name" value="{{ .goods.Name}}" class="form-control" id="goods-name" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-desc" class="col-sm-2 control-label">
+						商品简介
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="desc" value="{{ .goods.Desc }}" class="form-control" id="goods-desc" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-bn" class="col-sm-2 control-label">
+						货号
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="bn" value="{{ .goods.Bn }}" class="form-control" id="goods-bn" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-cost" class="col-sm-2 control-label">
+						成本价
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="cost" value="{{ .goods.Cost }}" class="form-control" id="goods-cost" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-price" class="col-sm-2 control-label">
+						销售价
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="price" value="{{ .goods.Price }}" class="form-control" id="goods-price" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-pic-url" class="col-sm-2 control-label">
+						商品图片
+					</label>
+					<div class="col-sm-10">
+						<input type="file" name="pic_url" value="{{ .goods.PicUrl }}" class="" id="goods-pic-url" />
+						<img src="{{ .goods.PicUrl }}" id="goods-pic-show" width="150" height="150" title="商品缩略图">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-type-id" class="col-sm-2 control-label">
+						类型
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="type_id" value="{{ .goods.TypeId }}" class="form-control" id="goods-type-id" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-cat-id" class="col-sm-2 control-label">
+						分类
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="cat_id" value="{{ .goods.CatId }}" class="form-control" id="goods-cat-id" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						 
+						<button type="submit" class="btn btn-default">
+							{{ if .id }}修改商品信息{{ else }}创建商品{{ end}}
+						</button>
+					</div>
+				</div>
+			</form>
+			<!--<form role="form">
+				<div class="form-group">
+					 
+					<label for="exampleInputEmail1">
+						Email address
+					</label>
+					<input type="email" class="form-control" id="exampleInputEmail1" />
+				</div>
+				<div class="form-group">
+					 
+					<label for="exampleInputPassword1">
+						Password
+					</label>
+					<input type="password" class="form-control" id="exampleInputPassword1" />
+				</div>
+				<div class="form-group">
+					 
+					<label for="exampleInputFile">
+						File input
+					</label>
+					<input type="file" id="exampleInputFile" />
+					<p class="help-block">
+						Example block-level help text here.
+					</p>
+				</div>
+				<div class="checkbox">
+					 
+					<label>
+						<input type="checkbox" /> Check me out
+					</label>
+				</div> 
+				<button type="submit" class="btn btn-default">
+					Submit
+				</button>
+			</form>-->
+		</div>
+	</div>
+</div>
+
+<script>
+	$(function(){
+	    var options  = {
+            type: 'POST',
+            success:function(res){
+                //成功回调
+                if(res.result == 1){
+                    layer.msg(res.msg, {icon: 6, anim:6, time: 1500}, function(){
+                        parent.layer.closeAll()
+					});
+                }else{
+                    layer.msg(res.msg, {icon: 5, anim:6});
+                }
+            }
+        };
+        $("#goods-form").ajaxForm(options).submit(function(e){
+            return false;
+
+		});
+	});
+
+</script>

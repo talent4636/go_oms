@@ -1,0 +1,144 @@
+<div class="panel panel-default">
+	<!-- Default panel contents -->
+	<div class="panel-heading">商品列表</div>
+	<div class="panel-body" style="padding: 5px;">
+    <!--这里是模块标题/名称-->
+	
+		<div class="btn-group btn-group-sm" role="group" aria-label="...">
+			<button type="button" class="btn btn-default">
+				<a target="_blank" class="new-goods" data-href="/goods/add">添加商品</a>
+			</button>
+			<button type="button" class="btn btn-default">Middle</button>
+			<button type="button" class="btn btn-default">菜单1</button>
+			<button type="button" class="btn btn-default">菜单2</button>
+			<button type="button" class="btn btn-default">Right</button>
+		</div>
+		
+	</div>
+	<!-- Table -->
+	<table class="table">
+		<thead>
+			<tr class="active">
+				<th>
+					序号
+				</th>
+				<th>
+					操作
+				</th>
+				<th>
+					名称
+				</th>
+				<th>
+					货号
+				</th>
+				<th>
+					描述
+				</th>
+				<th>
+					价格
+				</th>
+				<th>
+					创建时间
+				</th>
+				<th>
+					最后修改时间
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{range $key, $val := .goods}}
+			<tr>
+				<td>
+					{{$val.Id}}
+				</td>
+				<td>
+					<a target="_blank" class="edit-goods list-btn" data-href="/goods/edit/{{$val.Id}}">编辑</a>
+					<a data-url="/goods/delete/{{$val.Id}}" class="delete-goods list-btn">删除</a>
+				</td>
+				<td>
+					{{$val.Name}}
+				</td>
+				<td>
+					{{$val.Bn}}
+				</td>
+				<td>
+					{{$val.Desc}}
+				</td>
+				<td>
+					{{$val.Price}}
+				</td>
+				<td>
+					{{dateformat $val.Created "2006-01-02 15:04:05"}}
+				</td>
+				<td>
+					{{dateformat $val.Modified "2006-01-02 15:04:05"}}
+				</td>
+			</tr>
+			{{end}}
+			<!--<tr class="">&lt;!&ndash; active danger warning danger &ndash;&gt;-->
+				<!--<td>-->
+					<!--1-->
+				<!--</td>-->
+				<!--<td>-->
+					<!--TB - Monthly-->
+				<!--</td>-->
+				<!--<td>-->
+					<!--01/04/2012-->
+				<!--</td>-->
+				<!--<td>-->
+					<!--Approved-->
+				<!--</td>-->
+			<!--</tr>-->
+		</tbody>
+	</table>
+</div>
+
+<script>
+	$(function(){
+	    //删除商品
+        $(".delete-goods").click(function(){
+            var _url = $(this).attr("data-url");
+            layer.confirm('确定要删除本商品吗?', {icon: 3, title:'提示'}, function(index){
+                //确认之后的回调 ajax删除的事情
+				$.ajax({
+                    url:_url,
+                    type:"POST",
+                    success:function(res){
+                        if(res.result == 1){
+                            layer.msg(res.msg, {icon: 6, offset:'t', anim:6, time: 2000}, function(){
+                                _reloadPage();
+                            });
+                        }else{
+                            layer.msg(res.msg, {icon: 5, offset:'t', anim:6, time: 2000});
+                        }
+                    }
+                });
+                //todo 刷新主页列表
+                layer.close(index);
+            });
+        });
+
+        //增加或者新建
+        $(".new-goods, .edit-goods").click(function(){
+            var _url = $(this).attr("data-href");
+            layer.open({
+                type: 2,
+                content: _url,
+                title: "新增商品",
+                area: ['800px', '700px'],
+                maxmin: true,
+                success: function(_e){
+                    //
+                },
+                end:function () {
+                    _reloadPage();//关闭后刷新页面
+                }
+            });
+        });
+
+        //刷新页面
+        var _reloadPage = function(){
+            location.reload();
+        }
+	});
+</script>

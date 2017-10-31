@@ -1,0 +1,20 @@
+div.messagebox{
+	width:500px;
+	margin:0 auto;
+	margin-top:50px;
+	height:80px;
+	line-height:80px;
+	padding:0 10px;
+}
+
+.messagebox.error{
+	border:1px solid black;
+	border-radius: 5px;
+	color:red;
+}
+
+.messagebox.succ{
+	border:1px solid black;
+	border-radius: 5px;
+	color:green;
+}
