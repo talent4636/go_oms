@@ -16,7 +16,7 @@ func (this *GoodsController) Get() {
 	this.Data["cssPath"] = "./"
 	mdlGoods := new(models.Goods)
 	if goods, _ := mdlGoods.GetAll(); len(goods) > 0 {
-		logs.Warn(goods)
+		//logs.Warn(goods)
 		this.Data["goods"] = goods
 	}
 	this.Layout = "layout/main.html"
@@ -63,6 +63,22 @@ func (this *GoodsController) Save() {
 		//TODO modify goods
 		id, _ := strconv.Atoi(post["id"][0])
 		this.Data["json"] = map[string]interface{}{"result":0,"msg":"有ID:["+strconv.Itoa(id)+"],comming soon!"}
+		mdlGoods := new(models.Goods)
+		data := map[string]interface{}{
+			"name":post["name"][0],
+			"bn":post["bn"][0],
+			"price":post["price"][0],
+			"desc":post["desc"][0],
+			"type_id":post["type_id"][0],
+			"cost":post["cost"][0],
+			"pic_url":post["pic_url"][0],
+			"cat_id":post["cat_id"][0],
+		}
+		if _,err := mdlGoods.Update(data, id);err!=nil{
+			this.Data["json"] = map[string]interface{}{"result":0,"msg":"更新失败，请重试"}
+		}else{
+			this.Data["json"] = map[string]interface{}{"result":1,"msg":"更新成功"}
+		}
 	} else {
 		//add goods
 		mdlGoods := new(models.Goods)

@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	//_ "oms/controllers/goods"
 )
 
 type Goods struct {
@@ -43,6 +44,11 @@ func (this *Goods) Add(goods *Goods) (int, error) {
 func (this *Goods) Delete(goods_id int) (int64, error){
 	o := orm.NewOrm()
 	return o.QueryTable("oms_goods").Filter("id", goods_id).Delete()
+}
+
+func (this *Goods) Update(data map[string]interface{}, goods_id int) (int64, error){
+	o := orm.NewOrm()
+	return o.QueryTable("oms_goods").Filter("id",goods_id).Update(data);
 }
 
 //返回表名
