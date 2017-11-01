@@ -6,6 +6,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
+	"oms/controllers/base"
 )
 
 type GoodsController struct {
@@ -13,6 +14,7 @@ type GoodsController struct {
 }
 
 func (this *GoodsController) Get() {
+	this.Data["_BASE"] = base.NavData("/goods")
 	this.Data["cssPath"] = "./"
 	mdlGoods := new(models.Goods)
 	if goods, _ := mdlGoods.GetAll(); len(goods) > 0 {
