@@ -94,7 +94,7 @@
 									</a>
 									{{range $k, $sub := $nav.sub_nav }}
 										<a href="{{ $sub.url }}" class="list-group-item {{ if $sub.select }}active{{end}}">
-											<span class="badge">0</span>
+											<span class="badge">{{ if $sub.select }}{{ $._COUNT }}{{else}}{{end}}</span>
 											{{ $sub.name }}
 										</a>
 									{{end}}

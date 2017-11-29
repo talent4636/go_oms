@@ -5,6 +5,7 @@ import (
 	"oms/controllers/goods"
 
 	"github.com/astaxie/beego"
+	"oms/controllers/branch"
 )
 
 func init() {
@@ -16,4 +17,6 @@ func init() {
 	beego.Router("/goods/edit/?:id", &goods.GoodsController{}, "Get:Edit")
 	beego.Router("/goods/delete/?:id", &goods.GoodsController{}, "Post:Delete")
 	beego.Router("/goods/save", &goods.GoodsController{}, "Post:Save")
+
+	beego.Router("/branch", &branch.BranchController{}, "Get:Get")
 }

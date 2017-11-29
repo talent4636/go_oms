@@ -16,6 +16,8 @@ func init() {
 	orm.SetMaxOpenConns("default", 30)
 	//需要注册的表都写到这里
 	orm.RegisterModelWithPrefix("oms_", new(Goods))
+	orm.RegisterModelWithPrefix("oms_", new(Branch))
+	//orm.RegisterModelWithPrefix("oms_", new(BranchStore))
 	//END
 	orm.RunSyncdb("default", false, true) //第二个参数，true就强制更新表了
 }
