@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ .title }}</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="{{ .cssPath }}static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ .cssPath }}static/css/style.css" rel="stylesheet">
+
+    <script src="{{ .cssPath }}static/js/jquery.min.js"></script>
+    <script src="{{ .cssPath }}static/js/bootstrap.min.js"></script>
+    <script src="{{ .cssPath }}static/js/scripts.js"></script>
+    <script src="{{ .cssPath }}static/layer/layer.js"></script>
+
+    <script src="{{ .cssPath }}static/js/jquery.form.js"></script>
+
+</head>
+<body>
+{{.LayoutContent}}
+</body>
+</html>

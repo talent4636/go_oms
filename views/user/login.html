@@ -1,0 +1,77 @@
+<style>
+    body {
+        /*background: #f8f6e9;*/
+        background: #DDD;
+    }
+    .mycenter{
+        margin-top: 200px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 350px;
+        width:500px;
+        padding: 5%;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    .mycenter mysign{
+        width: 440px;
+    }
+    .mycenter input,checkbox,button{
+        margin-top:2%;
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    .mycheckbox{
+        margin-top:10px;
+        margin-left: 40px;
+        margin-bottom: 10px;
+        height: 10px;
+    }
+</style>
+
+<form action="login" method="post" id="login-form">
+    <div class="mycenter">
+        <div class="mysign">
+            <div class="col-lg-11 text-center text-info">
+                <h2>请登录</h2>
+            </div>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="username" placeholder="请输入账户名" required autofocus/>
+            </div>
+            <div class="col-lg-10"></div>
+            <div class="col-lg-10">
+                <input type="password" class="form-control" name="password" placeholder="请输入密码" required autofocus/>
+            </div>
+            <div class="col-lg-10"></div>
+            <div class="col-lg-10 mycheckbox checkbox">
+                <input type="checkbox" class="col-lg-1">记住密码</input>
+            </div>
+            <div class="col-lg-10"></div>
+            <div class="col-lg-10">
+                <button type="submit" class="btn btn-success col-lg-12">登录</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    //js拦截form表单提交，ajax效果
+    $(function(){
+        var options  = {
+            type: 'POST',
+            success:function(res){
+                //成功回调
+                if(res.result == 1){
+                    layer.msg(res.msg, {icon: 6, anim:6, time: 1500}, function(){
+                        parent.layer.closeAll()
+                    });
+                }else{
+                    layer.msg(res.msg, {icon: 5, anim:6});
+                }
+            }
+        };
+        $("#login-form").ajaxForm(options).submit(function(e){
+            return false;
+        });
+    });
+</script>
