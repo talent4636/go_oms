@@ -11,17 +11,29 @@ type UserController struct {
 
 func (this *UserController) Login(){
 
+	if this.CheckLogin(){
+		this.Redirect("/", 302)
+	}
+
 	//如果没有admin，就创建一个  初始 admin  admin123
 	mdlUser := new(models.User)
 	if !mdlUser.AdminInit() {
 		models.CreateAdmin()
 	}
 
+	//x := this.GetSession("aa")
+	//logs.Warn(x)
+	//sess := this.StartSession()
+	//logs.Warn(sess.Get("uname"))
+	//sess.Set("uname", "123123")
+	//this.SetSession("aa","aaaaa1")
+
 	this.Layout = "layout/onlyBody.html"
 	this.TplName = "user/login.html"
 }
 
 func (this *UserController) DoLogin(){
+	sess := this.StartSession()
 	username := this.GetString("username")
 	password := this.GetString("password")
 	if len(username)<4 || len(password)<6{
@@ -29,10 +41,28 @@ func (this *UserController) DoLogin(){
 	}else{
 		objUser := new(models.User)
 		if objUser.Check(username, password){
+			sess.Set("uname", username)
+			//this.SetSession("uanme", username)
 			this.Data["json"] = map[string]interface{}{"result":1,"msg":"登陆成功"}
 		}else{
 			this.Data["json"] = map[string]interface{}{"result":0,"msg":"用户名或密码错误"}
 		}
 	}
 	this.ServeJSON()
+}
+
+func (this *UserController) Logout (){
+	sess := this.StartSession()
+	sess.Delete("uname")
+	this.Redirect("/login", 302)
+}
+
+func (this *UserController) CheckLogin() bool {
+	sess := this.StartSession()
+	uname := sess.Get("uname")
+	if nil==uname {
+		return false
+	}else{
+		return true
+	}
 }

@@ -22,7 +22,6 @@ func (this *GoodsController) Get() {
 		this.Data["goods"] = goods
 		this.Data["_COUNT"] = strconv.Itoa(len(goods))
 	}
-	logs.Warn(this.Data)
 	this.Layout = "layout/main.html"
 	this.TplName = "goods/list.html"
 }
