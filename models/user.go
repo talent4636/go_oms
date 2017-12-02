@@ -139,3 +139,9 @@ func (u *User) GetOne(filters map[string]interface{}) User{
 		return data
 	}
 }
+
+func (u *User) Delete(id int) (int64, error) {
+	o := orm.NewOrm()
+	user := u.GetOne(map[string]interface{}{"id":id})
+	return o.Delete(&user)
+}

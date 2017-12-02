@@ -23,6 +23,7 @@ func init() {
 	beego.Router("/setting/user/edit/?:id", &user.UserSettingController{}, "Get:Edit")
 	beego.Router("/setting/user/add", &user.UserSettingController{}, "Get:Edit")
 	beego.Router("/setting/user/save", &user.UserSettingController{}, "Post:Save")
+	beego.Router("/setting/user/delete/?:id", &user.UserSettingController{}, "Post:Delete")
 
 	//商品模块
 	beego.Router("/goods", &goods.GoodsController{})

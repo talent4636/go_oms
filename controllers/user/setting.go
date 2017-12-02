@@ -77,3 +77,17 @@ func (this *UserSettingController) Save(){
 	}
 	this.ServeJSON()
 }
+
+func (this *UserSettingController) Delete(){
+	if id, err := strconv.Atoi(this.Ctx.Input.Param(":id")); err != nil {
+		this.Data["json"] = map[string]interface{}{"result":0,"msg":"服务器繁忙，请重试"}
+	}else{
+		mdlUser := new(models.User)
+		if _, err := mdlUser.Delete(id);err!=nil{
+			this.Data["json"] = map[string]interface{}{"result":0,"msg":"删除用户失败，请重试"}
+		}else{
+			this.Data["json"] = map[string]interface{}{"result":1,"msg":"删除用户成功"}
+		}
+	}
+	this.ServeJSON()
+}
