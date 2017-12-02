@@ -35,6 +35,52 @@ func CreateAdmin(){
 	u.Create("admin","admin123")
 }
 
+//创建用户
+func (u *User) New(user User) (int64, error){
+	o := orm.NewOrm()
+	objMd := md5.New()
+	objMd.Write([]byte(user.Password))
+	pass := hex.EncodeToString(objMd.Sum(nil))
+	user.Password = pass
+	if user.Created == ""{
+		user.Created = time.Now().Format(timeLayout)
+	}
+	return o.Insert(&user)
+}
+
+func (u *User) Modify(id int, modifyData map[string]interface{}) (int64, error){
+	o := orm.NewOrm()
+	user := u.GetOne(map[string]interface{}{"id":id})
+	for name,value := range modifyData{
+		//user.name = value
+		switch name {
+		case "id":
+			break
+		case "password":
+			if value==""{
+				break
+			}
+			objMd := md5.New()
+			objMd.Write([]byte(value.(string)))
+			pass := hex.EncodeToString(objMd.Sum(nil))
+			user.Password = pass
+			break
+		case "neckname":
+			user.Neckname = value.(string)
+			break
+		case "mobile":
+			user.Mobile = value.(string)
+			break
+		case "email":
+			user.Email = value.(string)
+			break
+		default:
+			break
+		}
+	}
+	return o.Update(&user)
+}
+
 func (u *User) Create(username string, password string) (int64, error){
 	o := orm.NewOrm()
 	if len(username)<4 || len(password)<6 {
@@ -61,5 +107,35 @@ func (u *User) Check(username string, password string) bool{
 			return true
 	}else{
 		return false
+	}
+}
+
+func (u *User) GetList(filters map[string]string, offset int, limit int) []User{
+	o := orm.NewOrm()
+	var data []User
+	tmp := o.QueryTable("oms_user")
+	for key,value := range filters{
+		tmp = tmp.Filter(key,value)
+	}
+	_,err := tmp.Offset(offset).Limit(limit).All(&data)
+	if err!=nil{
+		return nil
+	}else{
+		return data
+	}
+}
+
+func (u *User) GetOne(filters map[string]interface{}) User{
+	o := orm.NewOrm()
+	var data User
+	tmp := o.QueryTable("oms_user")
+	for key,value := range filters{
+		tmp = tmp.Filter(key,value)
+	}
+	_,err := tmp.All(&data)
+	if err!=nil{
+		return User{}
+	}else {
+		return data
 	}
 }

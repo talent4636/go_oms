@@ -3,8 +3,6 @@ package base
 import (
     "github.com/astaxie/beego"
 	_ "flag"
-	_ "github.com/astaxie/beego/logs"
-	"github.com/astaxie/beego/logs"
 )
 
 type BaseController struct {
@@ -13,7 +11,6 @@ type BaseController struct {
 
 //返回NavData map类型
 func NavData(url string) map[string]interface{}{
-	//TODO 规定标题和菜单，和当前选中
 	data := map[string]interface{}{
 		"nav_list":map[int]interface{}{
 			1:map[string]interface{}{
@@ -45,6 +42,23 @@ func NavData(url string) map[string]interface{}{
 					},
 				},
 			},
+			3:map[string]interface{}{
+				"name":"设置",
+				"select":false,
+				"url":"/setting",
+				"sub_nav":map[int]interface{}{
+					1:map[string]interface{}{
+						"name":"用户管理",
+						"select":false,
+						"url":"/setting/user",
+					},
+					2:map[string]interface{}{
+						"name":"TODO",
+						"select":false,
+						"url":"/setting/todo",
+					},
+				},
+			},
 		},
 		"site_name":"OrderManageSystem",
 	}
@@ -69,7 +83,16 @@ func NavData(url string) map[string]interface{}{
 
 	}
 	data["nav_list"].(map[int]interface{})[mainSelectKey].(map[string]interface{})["select"] = true
-	logs.Warn(data)
+
+	//获取当前登录的用户信息
+	ctlbase := *new(BaseController)
+	data["_CURRENT_USER"] = ctlbase.GetNeckName()
 
 	return data;
+}
+
+//TODO
+func (this *BaseController) GetNeckName() string {
+	//var ctx = new(beego.Controller)
+	return "管理员11"
 }

@@ -1,0 +1,80 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form class="form-horizontal" id="goods-form" role="form" action="/setting/user/save" method="POST">
+				{{ if .user.Id }}<input type="hidden" name="id" value="{{ .user.Id }}" >{{ end }}
+				<div class="form-group">
+					<label for="goods-name" class="col-sm-2 control-label">
+						用户名
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="username" value="{{ .user.Username}}" class="form-control" id="user-username" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-desc" class="col-sm-2 control-label">
+						用户密码
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="password" value="" placeholder="密码不可见，如果需要重新设置请输入" class="form-control" id="user-password" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-bn" class="col-sm-2 control-label">
+						昵称
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="neckname" value='{{if .user.Id }}{{if eq .user.Username "admin" }}超级管理员{{else}}{{ .user.NeckName }}{{end}}{{end}}' class="form-control" id="user-neckname" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-cost" class="col-sm-2 control-label">
+						手机号码
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="mobile" value="{{ .user.Mobile }}" class="form-control" id="user-mobile" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="goods-price" class="col-sm-2 control-label">
+						邮件地址
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="email" value="{{ .user.Email }}" class="form-control" id="user-email" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						 
+						<button type="submit" class="btn btn-default">
+							{{ if .id }}修改用不信息{{ else }}创建用户{{ end}}
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(function(){
+	    var options  = {
+            type: 'POST',
+            success:function(res){
+                //成功回调
+                if(res.result == 1){
+                    layer.msg(res.msg, {icon: 6, anim:6, time: 1500}, function(){
+                        parent.layer.closeAll()
+					});
+                }else{
+                    layer.msg(res.msg, {icon: 5, anim:6});
+                }
+            }
+        };
+        $("#goods-form").ajaxForm(options).submit(function(e){
+            return false;
+
+		});
+	});
+
+</script>

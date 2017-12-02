@@ -41,8 +41,13 @@ func (this *UserController) DoLogin(){
 	}else{
 		objUser := new(models.User)
 		if objUser.Check(username, password){
+			if(username == "admin"){
+				sess.Set("neckname", "超级管理员")
+			}else{
+				userInfo := objUser.GetOne(map[string]interface{}{"username":username})
+				sess.Set("neckname", userInfo.Neckname)
+			}
 			sess.Set("uname", username)
-			//this.SetSession("uanme", username)
 			this.Data["json"] = map[string]interface{}{"result":1,"msg":"登陆成功"}
 		}else{
 			this.Data["json"] = map[string]interface{}{"result":0,"msg":"用户名或密码错误"}
@@ -54,6 +59,7 @@ func (this *UserController) DoLogin(){
 func (this *UserController) Logout (){
 	sess := this.StartSession()
 	sess.Delete("uname")
+	sess.Delete("neckname")
 	this.Redirect("/login", 302)
 }
 
@@ -64,5 +70,15 @@ func (this *UserController) CheckLogin() bool {
 		return false
 	}else{
 		return true
+	}
+}
+
+func (this *UserController) GetNeckName() string {
+	if this.CheckLogin(){
+		sess := this.StartSession()
+		neckname := sess.Get("neckname")
+		return neckname.(string)
+	}else{
+		return ""
 	}
 }
