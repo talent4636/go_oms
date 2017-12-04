@@ -7,12 +7,24 @@ import (
 	"github.com/astaxie/beego"
 	"oms/controllers/branch"
 	"oms/controllers/user"
+	"github.com/astaxie/beego/context"
 )
 
 func init() {
 
+	//所有内容必须登陆才能显示
+	beego.InsertFilter("/*", beego.BeforeRouter, func(context *context.Context) {
+		var url string = context.Input.URL()
+		if url != "/login" {
+			objUser := &user.UserController{}
+			objUser.Ctx = context
+			if !objUser.CheckLogin() {
+				context.Redirect(302, "/login")
+			}
+		}
+	})
+
 	beego.Router("/", &controllers.MainController{})
-	//	beego.Router("/", &goods.GoodsController{})
 
 	//登陆注册模块
 	beego.Router("/login", &user.UserController{}, "Get:Login;Post:DoLogin")
