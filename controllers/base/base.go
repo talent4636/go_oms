@@ -72,7 +72,7 @@ func NavData(url string) map[string]interface{}{
 		//	data["nav_list"].(map[int]interface{})[int(key)].(map[string]interface{})["select"] = false
 		//}
 		for k,v := range value.(map[string]interface{})["sub_nav"].(map[int]interface{}){
-			if(v.(map[string]interface{})["url"] == url){
+			if v.(map[string]interface{})["url"] == url {
 				mainSelectKey = int(key)
 				data["nav_list"].(map[int]interface{})[int(key)].(map[string]interface{})["sub_nav"].(map[int]interface{})[int(k)].(map[string]interface{})["select"] = true
 			}else{

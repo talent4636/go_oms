@@ -41,7 +41,7 @@ func (this *UserController) DoLogin(){
 	}else{
 		objUser := new(models.User)
 		if objUser.Check(username, password){
-			if(username == "admin"){
+			if username == "admin" {
 				sess.Set("neckname", "超级管理员")
 			}else{
 				userInfo := objUser.GetOne(map[string]interface{}{"username":username})
