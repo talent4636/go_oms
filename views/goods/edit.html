@@ -123,7 +123,7 @@
             success:function(res){
                 //成功回调
                 if(res.result == 1){
-                    layer.msg(res.msg, {icon: 6, anim:6, time: 1500}, function(){
+                    layer.msg(res.msg, {icon: 6, anim:6, time: 1500, offset:'t'}, function(){
                         parent.layer.closeAll()
 					});
                 }else{

@@ -24,7 +24,7 @@
 						昵称
 					</label>
 					<div class="col-sm-10">
-						<input type="text" name="neckname" value='{{if .user.Id }}{{if eq .user.Username "admin" }}超级管理员{{else}}{{ .user.NeckName }}{{end}}{{end}}' class="form-control" id="user-neckname" />
+						<input type="text" name="neckname" value='{{if .user.Id }}{{if eq .user.Username "admin" }}超级管理员{{else}}{{ .user.Neckname }}{{end}}{{end}}' class="form-control" id="user-neckname" />
 					</div>
 				</div>
 				<div class="form-group">
@@ -63,11 +63,11 @@
             success:function(res){
                 //成功回调
                 if(res.result == 1){
-                    layer.msg(res.msg, {icon: 6, anim:6, time: 1500}, function(){
+                    layer.msg(res.msg, {icon: 6, anim:6, offset:'t', time: 1500}, function(){
                         parent.layer.closeAll()
 					});
                 }else{
-                    layer.msg(res.msg, {icon: 5, anim:6});
+                    layer.msg(res.msg, {icon: 5, offset:'t', anim:6});
                 }
             }
         };
