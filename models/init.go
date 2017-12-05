@@ -18,6 +18,11 @@ func init() {
 	orm.RegisterModelWithPrefix("oms_", new(Goods))
 	orm.RegisterModelWithPrefix("oms_", new(Branch))
 	orm.RegisterModelWithPrefix("oms_", new(User))
+	orm.RegisterModelWithPrefix("oms_", new(Orders))
+	orm.RegisterModelWithPrefix("oms_", new(OrderItem))
+	orm.RegisterModelWithPrefix("oms_", new(Shop))
+	orm.RegisterModelWithPrefix("oms_", new(PmtOrder))
+	orm.RegisterModelWithPrefix("oms_", new(PmtGoods))
 	//orm.RegisterModelWithPrefix("oms_", new(BranchStore))
 	//END
 	orm.RunSyncdb("default", false, true) //第二个参数，true就强制更新表了

@@ -8,7 +8,7 @@ import (
 )
 
 type Goods struct {
-	Id       int
+	Id       int 	 `orm:"column(goods_id)";pk:"auto"`
 	Name     string
 	Desc     string  `orm:"size(255);null"`
 	Bn       string  `orm:"unique"`
@@ -19,6 +19,7 @@ type Goods struct {
 	CatId    int
 	Created  time.Time `orm:"auto_now_add;type(datetime)"`
 	Modified time.Time `orm:"auto_now;type(datetime)"`
+	OrderItem *OrderItem `orm:"reverse(one)"`
 }
 
 func (this *Goods) GetAll() ([]Goods, error) {
