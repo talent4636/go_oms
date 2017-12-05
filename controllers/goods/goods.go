@@ -14,7 +14,7 @@ type GoodsController struct {
 }
 
 func (this *GoodsController) Get() {
-	this.Data["_BASE"] = base.NavData("/goods")
+	this.Data["_BASE"] = base.NavData("/goods", this.Ctx)
 	this.Data["cssPath"] = "./"
 	mdlGoods := new(models.Goods)
 	if goods, _ := mdlGoods.GetAll(); len(goods) > 0 {
@@ -32,7 +32,6 @@ func (this *GoodsController) Edit() {
 		this.Data["cssPath"] = "./../"
 		this.Data["title"] = "新增商品"
 		this.Data["pageTitle"] = "新增商品"
-		//this.Redirect("/goods", 302) //没有ID的话，新增
 	}else{
 		mdlGoods := new(models.Goods)
 		data, _ := mdlGoods.GetOne(id)
@@ -60,7 +59,6 @@ func (this *GoodsController) Delete(){
 }
 
 func (this *GoodsController) Save() {
-	//var GOODS_PIC_SAVE_PATH string = "static/img/goods/"
 	var picUrl string
 	if picFile,fileHeader,err := this.GetFile("pic_url"); err!=nil{
 		this.Data["json"] = map[string]interface{}{"result":0,"msg":err}

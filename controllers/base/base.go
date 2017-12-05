@@ -3,6 +3,7 @@ package base
 import (
     "github.com/astaxie/beego"
 	_ "flag"
+	"github.com/astaxie/beego/context"
 )
 
 type BaseController struct {
@@ -10,7 +11,7 @@ type BaseController struct {
 }
 
 //返回NavData map类型
-func NavData(url string) map[string]interface{}{
+func NavData(url string, ctx *context.Context) map[string]interface{}{
 	data := map[string]interface{}{
 		"nav_list":map[int]interface{}{
 			1:map[string]interface{}{
@@ -66,11 +67,6 @@ func NavData(url string) map[string]interface{}{
 	//设置选中
 	var mainSelectKey int;
 	for key, value := range data["nav_list"].(map[int]interface{}){
-		//if value.(map[string]interface{})["url"] == url {
-		//	data["nav_list"].(map[int]interface{})[int(key)].(map[string]interface{})["select"] = true
-		//}else{
-		//	data["nav_list"].(map[int]interface{})[int(key)].(map[string]interface{})["select"] = false
-		//}
 		for k,v := range value.(map[string]interface{})["sub_nav"].(map[int]interface{}){
 			if v.(map[string]interface{})["url"] == url {
 				mainSelectKey = int(key)
@@ -84,15 +80,18 @@ func NavData(url string) map[string]interface{}{
 	}
 	data["nav_list"].(map[int]interface{})[mainSelectKey].(map[string]interface{})["select"] = true
 
-	//获取当前登录的用户信息
-	ctlbase := *new(BaseController)
-	data["_CURRENT_USER"] = ctlbase.GetNeckName()
+	data["current_user"] = GetNeckName(ctx)
 
 	return data;
 }
 
-//TODO
-func (this *BaseController) GetNeckName() string {
-	//var ctx = new(beego.Controller)
-	return "管理员11"
+func GetNeckName(ctx *context.Context) string {
+	obj := new(beego.Controller)
+	obj.Ctx = ctx
+	sess := obj.StartSession()
+	ss := sess.Get("neckname")
+	if ss==nil || ss=="" {
+		ss = sess.Get("uname")
+	}
+	return ss.(string)
 }

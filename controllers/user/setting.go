@@ -13,7 +13,7 @@ type UserSettingController struct {
 }
 
 func (this *UserSettingController) List(){
-	this.Data["_BASE"] = base.NavData("/setting/user")
+	this.Data["_BASE"] = base.NavData("/setting/user", this.Ctx)
 	this.Data["cssPath"] = "../"
 	mdlUser := new(models.User)
 	users := mdlUser.GetList(nil,0,10)
