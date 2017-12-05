@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
-			<form class="form-horizontal" id="goods-form" role="form" action="/goods/save" method="POST">
+			<form class="form-horizontal" enctype="multipart/form-data" id="goods-form" role="form" action="/goods/save" method="POST">
 				{{ if .goods.Id }}<input type="hidden" name="id" value="{{ .goods.Id }}" >{{ end }}
 				<div class="form-group">
 					<label for="goods-name" class="col-sm-2 control-label">
@@ -120,10 +120,11 @@
 	$(function(){
 	    var options  = {
             type: 'POST',
+            // contentType:"multipart/form-data",
             success:function(res){
                 //成功回调
                 if(res.result == 1){
-                    layer.msg(res.msg, {icon: 6, anim:6, time: 1500, offset:'t'}, function(){
+                    layer.msg(res.msg, {icon: 6, anim:6, time: 1500}, function(){
                         parent.layer.closeAll()
 					});
                 }else{

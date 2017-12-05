@@ -60,8 +60,24 @@ func (this *GoodsController) Delete(){
 }
 
 func (this *GoodsController) Save() {
+	//var GOODS_PIC_SAVE_PATH string = "static/img/goods/"
+	var picUrl string
+	if picFile,fileHeader,err := this.GetFile("pic_url"); err!=nil{
+		this.Data["json"] = map[string]interface{}{"result":0,"msg":err}
+		this.ServeJSON()
+		return
+	}else{
+		objBase := new(base.ImageController)
+		objBase.Ctx = this.Ctx
+		var errSave error
+		picUrl,errSave = objBase.SavePic("goods",picFile,fileHeader)
+		if errSave!=nil{
+			this.Data["json"] = map[string]interface{}{"result":0,"msg":errSave}
+			this.ServeJSON()
+			return
+		}
+	}
 	post := this.Input()
-
 	if _, ok := post["id"]; ok {
 		//TODO modify goods
 		id, _ := strconv.Atoi(post["id"][0])
@@ -74,7 +90,7 @@ func (this *GoodsController) Save() {
 			"desc":post["desc"][0],
 			"type_id":post["type_id"][0],
 			"cost":post["cost"][0],
-			"pic_url":post["pic_url"][0],
+			"pic_url":picUrl,
 			"cat_id":post["cat_id"][0],
 		}
 		if _,err := mdlGoods.Update(data, id);err!=nil{
@@ -95,7 +111,7 @@ func (this *GoodsController) Save() {
 		price, _ := strconv.ParseFloat(post["price"][0], 32)
 		goods.Price = float32(price)
 		//		goods.Price = post["price"][0]
-		goods.PicUrl = post["pic_url"][0]
+		goods.PicUrl = picUrl
 		type_id, _ := strconv.Atoi(post["type_id"][0])
 		goods.TypeId = type_id
 		cat_id, _ := strconv.Atoi(post["cat_id"][0])
