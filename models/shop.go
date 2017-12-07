@@ -6,5 +6,5 @@ type Shop struct {
 	Name string
 	Status int `orm:"default(0)"` //0未绑定  1已绑定
 	Info string `orm:"null"`
-	Orders *Orders `orm:"rel(one)"`
+	Orders *Order `orm:"rel(one)"`
 }

@@ -18,7 +18,7 @@ func init() {
 	orm.RegisterModelWithPrefix("oms_", new(Goods))
 	orm.RegisterModelWithPrefix("oms_", new(Branch))
 	orm.RegisterModelWithPrefix("oms_", new(User))
-	orm.RegisterModelWithPrefix("oms_", new(Orders))
+	orm.RegisterModelWithPrefix("oms_", new(Order))
 	orm.RegisterModelWithPrefix("oms_", new(OrderItem))
 	orm.RegisterModelWithPrefix("oms_", new(Shop))
 	orm.RegisterModelWithPrefix("oms_", new(PmtOrder))

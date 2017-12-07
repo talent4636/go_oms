@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
-	//_ "oms/controllers/goods"
 )
 
 type Goods struct {
@@ -19,7 +18,7 @@ type Goods struct {
 	CatId    int
 	Created  time.Time `orm:"auto_now_add;type(datetime)"`
 	Modified time.Time `orm:"auto_now;type(datetime)"`
-	OrderItem *OrderItem `orm:"reverse(one)"`
+	OrderItem []*OrderItem `orm:"reverse(many)"`
 }
 
 func (this *Goods) GetAll() ([]Goods, error) {

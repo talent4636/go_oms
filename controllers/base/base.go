@@ -44,6 +44,18 @@ func NavData(url string, ctx *context.Context) map[string]interface{}{
 				},
 			},
 			3:map[string]interface{}{
+				"name":"订单",
+				"select":false,
+				"url":"/order",
+				"sub_nav":map[int]interface{}{
+					1:map[string]interface{}{
+						"name":"订单列表",
+						"select":false,
+						"url":"/order/list",
+					},
+				},
+			},
+			4:map[string]interface{}{
 				"name":"设置",
 				"select":false,
 				"url":"/setting",

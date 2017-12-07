@@ -1,0 +1,143 @@
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">订单列表</div>
+    <div class="panel-body" style="padding: 5px;">
+        <!--这里是模块标题/名称-->
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <button type="button" class="btn btn-default">
+                <a target="_blank" class="new-orders" data-href="#">新建订单</a>
+            </button>
+            <button type="button" class="btn btn-default">Middle</button>
+            <button type="button" class="btn btn-default">菜单1</button>
+            <button type="button" class="btn btn-default">菜单2</button>
+            <button type="button" class="btn btn-default">Right</button>
+        </div>
+    </div>
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr class="active">
+            <th>
+                订单号
+            </th>
+            <th>
+                操作
+            </th>
+            <th>
+                订单状态
+            </th>
+            <th>
+                总金额
+            </th>
+            <th>
+                支付方式
+            </th>
+            <th>
+                已支付金额
+            </th>
+            <th>
+                创建时间
+            </th>
+            <th>
+                发货状态
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range $key, $val := .orders}}
+        <tr>
+            <td>
+            {{$val.OrderBn}}
+            </td>
+            <td>
+                <a target="_blank" class="edit-orders list-btn" data-href="/orders/edit/{{$val.Id}}">编辑</a>
+                {{/*<a data-url="/orders/delete/{{$val.Id}}" class="delete-orders list-btn">删除</a>*/}}
+            </td>
+            <td>
+            <!--0活动订单   1完成订单finish    2作废订单-->
+                {{if eq $val.Status 0}}
+                活动订单
+                {{else if eq $val.Status 1}}
+                已完成
+                {{else if eq $val.Status 2}}
+                作废订单
+                {{end}}
+            </td>
+            <td>
+            {{$val.TotalPrice}}
+            </td>
+            <td>
+            {{$val.PayMethod}}
+            </td>
+            <td>
+            {{$val.Payed}}
+            </td>
+            <td>
+            {{dateformat $val.Created "2006-01-02 15:04:05"}}
+            </td>
+            <td>
+                <!-- 0未发货  1已发货   2部分发货   3已退货 -->
+                {{if eq $val.ShipStatus 0}}
+                    未发货
+                {{else if eq $val.ShipStatus 1}}
+                    已发货
+                {{else if eq $val.ShipStatus 2}}
+                    部分发货
+                {{else if eq $val.ShipStatus 3}}
+                    已退货
+                {{end}}
+            </td>
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(function(){
+        //删除商品
+        $(".delete-orders").click(function(){
+            var _url = $(this).attr("data-url");
+            layer.confirm('确定要删除本订单吗?', {icon: 3, title:'提示'}, function(index){
+                //确认之后的回调 ajax删除的事情
+                $.ajax({
+                    url:_url,
+                    type:"POST",
+                    success:function(res){
+                        if(res.result == 1){
+                            layer.msg(res.msg, {icon: 6, offset:'t', anim:6, time: 2000}, function(){
+                                _reloadPage();
+                            });
+                        }else{
+                            layer.msg(res.msg, {icon: 5, offset:'t', anim:6, time: 2000});
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        });
+
+        //增加或者新建
+        $(".new-orders, .edit-orders").click(function(){
+            var _url = $(this).attr("data-href");
+            layer.open({
+                type: 2,
+                content: _url,
+                title: "新增订单",
+                area: ['800px', '600px'],
+                maxmin: true,
+                success: function(_e){
+                    //
+                },
+                end:function () {
+                    _reloadPage();//关闭后刷新页面
+                }
+            });
+        });
+
+        //刷新页面
+        var _reloadPage = function(){
+            location.reload();
+        }
+    });
+</script>

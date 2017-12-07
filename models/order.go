@@ -2,9 +2,10 @@ package models
 
 import (
 	"time"
+	"github.com/astaxie/beego/orm"
 )
 
-type Orders struct {
+type Order struct {
 	Id       int `orm:"column(order_id)";pk:"auto"`
 	OrderBn  string  `orm:"column(order_bn)"`
 	OrderItem	[]*OrderItem	`orm:"reverse(many)"` //设置一对多的反向关系
@@ -35,4 +36,55 @@ type Orders struct {
 	Shop *Shop `orm:"reverse(one)"`
 	//支付信息
 	PayMethod string `orm:"column(pay_method);null;size(100)"`
+}
+
+func (this *Order) CreateOrder(order *Order) (int, error){
+	o := orm.NewOrm()
+	//创建订单加入事物
+	o.Begin()
+	if orderid64, err := o.Insert(order);err!=nil{
+		o.Rollback()
+		return 0,err
+	}else{
+		order_id := int(orderid64)
+		mdlItem := new(OrderItem)
+		for _,item := range order.OrderItem{
+			item.Order = order
+			//item.Goods = item.Goods
+			if _,err := mdlItem.Save(item); err!=nil{
+				o.Rollback()
+				return 0,err
+			}
+		}
+		o.Commit()
+		return order_id,nil
+	}
+}
+
+func (this *Order) GetDetail(order_id int) Order{
+	o := orm.NewOrm()
+	var order Order
+	if err:=o.QueryTable("oms_order").
+		Filter("order_id", order_id).One(&order); err!=nil{
+		return Order{}
+	}else{
+		mdlItem := new(OrderItem)
+		order.OrderItem = mdlItem.GetItemByOrderId(order_id)
+		return order
+	}
+}
+
+func (this *Order) GetList(filters map[string]string, offset int, limit int) []Order{
+	o := orm.NewOrm()
+	var orders []Order
+	tmp := o.QueryTable("oms_order")
+	for key,value := range filters{
+		tmp = tmp.Filter(key,value)
+	}
+	_,err := tmp.Offset(offset).Limit(limit).RelatedSel().All(&orders)
+	if err!=nil{
+		return nil
+	}else{
+		return orders
+	}
 }

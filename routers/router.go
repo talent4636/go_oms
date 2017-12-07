@@ -8,6 +8,8 @@ import (
 	"oms/controllers/branch"
 	"oms/controllers/user"
 	"github.com/astaxie/beego/context"
+	"oms/controllers/testcase"
+	"oms/controllers/order"
 )
 
 func init() {
@@ -44,6 +46,12 @@ func init() {
 	beego.Router("/goods/delete/?:id", &goods.GoodsController{}, "Post:Delete")
 	beego.Router("/goods/save", &goods.GoodsController{}, "Post:Save")
 
+	//订单模块
+	beego.Router("/order/list", &order.OrderListController{}, "Get:ShowList")
+
 	//仓库模块
 	beego.Router("/branch", &branch.BranchController{}, "Get:Get")
+
+	//testCase
+	beego.Router("/test/order", &testcase.TestController{},"Get:OrderCreate")
 }
