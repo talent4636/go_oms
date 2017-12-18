@@ -1,6 +1,8 @@
 package models
 
-import "github.com/astaxie/beego/orm"
+import (
+	"github.com/astaxie/beego/orm"
+)
 
 type OrderItem struct {
 	Id int
@@ -28,6 +30,11 @@ func (item *OrderItem) GetItemByOrderId(order_id int) []*OrderItem{
 	if _,err := o.QueryTable("oms_order_item").Filter("order_id",order_id).All(&items);err!=nil{
 		return nil
 	}else{
+		//把goods信息也放进去
+		for key,itm := range items{
+			goods,_ := new(Goods).GetOne(itm.Goods.Id)
+			items[key].Goods = &goods
+		}
 		return items
 	}
 }

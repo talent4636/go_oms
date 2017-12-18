@@ -48,6 +48,7 @@ func init() {
 
 	//订单模块
 	beego.Router("/order/list", &order.OrderListController{}, "Get:ShowList")
+	beego.Router("/order/detail/:id", &order.OrderListController{}, "Get:Detail")
 
 	//仓库模块
 	beego.Router("/branch", &branch.BranchController{}, "Get:Get")

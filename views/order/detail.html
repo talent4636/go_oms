@@ -1,0 +1,50 @@
+<div class="modal-body paddingtop">
+    <div class="panel panel-info table-responsive">
+        <div class="panel-heading text-center"><h4>
+            <strong>商品列表</strong></h4>
+        </div>
+        <div id="carttable">
+            <table class="table table-hover text-center">
+                <tr class="danger">
+                    <th class="text-center">序号</th>
+                    <th class="text-center">商品图片</th>
+                    <th class="text-center">商品名称</th>
+                    <th class="text-center">价格</th>
+                    <th class="text-center">购买数量</th>
+                    <th class="text-center">库存</th>
+                    <th class="text-center">小计</th>
+                </tr>
+                {{ range $key, $item := .order.OrderItem }}
+                    <tr>
+                        <td>{{ $item.Id }}</td>
+                        <td><img width="20" height="20" src="{{ $item.Goods.PicUrl }}"></td>
+                        <td>{{ $item.Goods.Name }}</td>
+                        <td>{{ $item.SalePrice }}</td>
+                        <td>{{ $item.Quantity }}</td>
+                        <td>TODO?</td>
+                        <td>{{ $item.SalePrice }}</td>
+                    </tr>
+                {{ end }}
+
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align: left!important;">
+        {{/*"Status": 0,*/}}
+        {{/*"ShipStatus": 0,*/}}
+        <br/>
+        <strong>来源店铺：</strong> {{ .order.Shop }}<br>
+        <strong>创建时间：</strong>{{.order.Created}} （最后修改于：{{.order.Modified}}）<br>
+        <strong>订单总金额：</strong> {{ .order.TotalPrice }} （已支付：{{ .order.Payed }}）<br>
+        <strong>收货区域：</strong> {{ .order.ReceiverProvince}}/{{ .order.ReceiverCity}}/{{ .order.ReceiverDistinct}}
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>邮编：</strong> {{ .order.ReceiverZip }} <br>
+        <strong>详细地址：</strong> {{ .order.ReceiverAddress }}<br>
+        <strong>收货人:</strong> {{ .order.ReceiverName }}（电话：{{ .order.ReceiverMobile }}）<br/>
+        <strong>支付方式：</strong> {{ .order.PayMethod }}&nbsp;&nbsp;&nbsp;&nbsp;
+        {{ if eq .order.PayStatus 1}}[已支付]{{ else }}[未支付]{{end}}
+        <br>
+        <strong>客户备注：</strong> {{ .order.CustomRemark }}<br>
+        <strong>客服备注：</strong> {{ .order.ServiceRemark }}<br>
+    </div>
+</div>
