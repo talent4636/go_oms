@@ -4,7 +4,7 @@
 由于是业余爱好，所以开发很慢，代码质量也不高，练练手。
 
 ### 安装方法
->依赖：[Beego]["https://github.com/astaxie/beego.git" "beego"]
+>依赖：[Beego][https://github.com/astaxie/beego.git "beego"]
 ```
 git clone https://github.com/talent4636/go_oms.git
 ```
