@@ -1,14 +1,13 @@
 package models
 
 import (
-	_ "time"
-
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"time"
 )
 
 func init() {
-	//	orm.DefaultTimeLoc = time.UTC //这里有问题，时区不对
+	orm.DefaultTimeLoc = time.UTC //这里有问题，时区不对
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	orm.RegisterDataBase("default", "mysql", "root:passw0rd@/beego_oms?charset=utf8")
 	//	orm.RegisterModel(new(User))
@@ -23,6 +22,7 @@ func init() {
 	orm.RegisterModelWithPrefix("oms_", new(Shop))
 	orm.RegisterModelWithPrefix("oms_", new(PmtOrder))
 	orm.RegisterModelWithPrefix("oms_", new(PmtGoods))
+	orm.RegisterModelWithPrefix("oms_", new(Store))
 	//orm.RegisterModelWithPrefix("oms_", new(BranchStore))
 	//END
 	orm.RunSyncdb("default", false, true) //第二个参数，true就强制更新表了
