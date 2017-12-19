@@ -5,7 +5,7 @@
 
 ### 安装方法
 >依赖：
-[Beego][https://github.com/astaxie/beego.git "beego"]
+[Beego](https://github.com/astaxie/beego.git "beego")
 ```
 git clone https://github.com/talent4636/go_oms.git
 ```
