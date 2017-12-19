@@ -19,10 +19,10 @@
                         <td>{{ $item.Id }}</td>
                         <td><img width="20" height="20" src="{{ $item.Goods.PicUrl }}"></td>
                         <td>{{ $item.Goods.Name }}</td>
-                        <td>{{ $item.SalePrice }}</td>
+                        <td>{{ $item.SalePrice | printf "%.2f" }}</td>
                         <td>{{ $item.Quantity }}</td>
                         <td>TODO?</td>
-                        <td>{{ $item.SalePrice }}</td>
+                        <td>{{ $item.SalePrice | printf "%.2f" }}</td>
                     </tr>
                 {{ end }}
 
@@ -32,10 +32,10 @@
     <div class="modal-footer" style="text-align: left!important;">
         {{/*"Status": 0,*/}}
         {{/*"ShipStatus": 0,*/}}
-        <br/>
-        <strong>来源店铺：</strong> {{ .order.Shop }}<br>
-        <strong>创建时间：</strong>{{.order.Created}} （最后修改于：{{.order.Modified}}）<br>
-        <strong>订单总金额：</strong> {{ .order.TotalPrice }} （已支付：{{ .order.Payed }}）<br>
+        <strong>运费：</strong> {{ .order.ShipPrice | printf "%.2f" }}<br>
+        <strong>来源店铺：</strong> {{ or .order.Shop "暂未绑定店铺" }}<br>
+        <strong>创建时间：</strong>{{date .order.Created "Y-m-d H:i:s"}} （最后修改于：{{date .order.Modified "Y-m-d H:i:s"}}）<br>
+        <strong>订单总金额：</strong> {{ .order.TotalPrice | printf "%.2f" }} （已支付：{{ .order.Payed | printf "%.2f" }}）<br>
         <strong>收货区域：</strong> {{ .order.ReceiverProvince}}/{{ .order.ReceiverCity}}/{{ .order.ReceiverDistinct}}
         &nbsp;&nbsp;&nbsp;&nbsp;
         <strong>邮编：</strong> {{ .order.ReceiverZip }} <br>

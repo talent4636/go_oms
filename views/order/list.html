@@ -5,10 +5,10 @@
         <!--这里是模块标题/名称-->
         <div class="btn-group btn-group-sm" role="group" aria-label="...">
             <button type="button" class="btn btn-default">
-                <a target="_blank" class="new-orders" data-href="#">新建订单</a>
+                <a target="_blank" class="new-orders" data-href="/order/new">新建订单</a>
             </button>
-            <button type="button" class="btn btn-default">Middle</button>
-            <button type="button" class="btn btn-default">菜单1</button>
+            <button type="button" class="btn btn-default"><a target="_blank" href="/test/order">testcaseCreateOrder</a></button>
+            <button type="button" class="btn btn-default"><a href="/order/list">刷新</a></button>
             <button type="button" class="btn btn-default">菜单2</button>
             <button type="button" class="btn btn-default">Right</button>
         </div>
@@ -95,7 +95,7 @@
 
 <script>
     $(function(){
-        //删除商品
+        //查看详细信息
         $(".detail-orders").click(function(){
             var _url = $(this).attr("data-url");
             layer.open({
@@ -111,44 +111,25 @@
                     _reloadPage();//关闭后刷新页面
                 }
             });
-
-
-            // layer.confirm('确定要删除本订单吗?', {icon: 3, title:'提示'}, function(index){
-            //     //确认之后的回调 ajax删除的事情
-            //     $.ajax({
-            //         url:_url,
-            //         type:"POST",
-            //         success:function(res){
-            //             if(res.result == 1){
-            //                 layer.msg(res.msg, {icon: 6, offset:'t', anim:6, time: 2000}, function(){
-            //                     _reloadPage();
-            //                 });
-            //             }else{
-            //                 layer.msg(res.msg, {icon: 5, offset:'t', anim:6, time: 2000});
-            //             }
-            //         }
-            //     });
-            //     layer.close(index);
-            // });
         });
 
-        //增加或者新建
-        // $(".new-orders, .edit-orders").click(function(){
-        //     var _url = $(this).attr("data-href");
-        //     layer.open({
-        //         type: 2,
-        //         content: _url,
-        //         title: "新增订单",
-        //         area: ['800px', '600px'],
-        //         maxmin: true,
-        //         success: function(_e){
-        //             //
-        //         },
-        //         end:function () {
-        //             _reloadPage();//关闭后刷新页面
-        //         }
-        //     });
-        // });
+        //手动创建订单
+        $(".new-orders").click(function(){
+            var _url = $(this).attr('data-href');
+            layer.open({
+                type:2,
+                content: _url,
+                title: "新建订单",
+                area: ['800px', '600px'],
+                maxmin: true,
+                success: function (e) {
+                    //
+                },
+                end:function () {
+                    _reloadPage();
+                }
+            });
+        });
 
         //刷新页面
         var _reloadPage = function(){

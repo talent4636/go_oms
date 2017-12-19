@@ -125,3 +125,10 @@ func (this *OrderListController) Detail(){
 	this.Layout = "layout/singlePage.html"
 	this.TplName = "order/detail.html"
 }
+
+func (this *OrderListController) New(){
+	this.Data["_BASE"] = base.NavData("/order/list", this.Ctx)
+	this.Data["cssPath"] = "../"
+	this.Layout = "layout/singlePage.html"
+	this.TplName = "order/new.html"
+}

@@ -13,9 +13,13 @@ type Testcase struct {
 var timeLayoutOrderBn string = "20060102150405"
 
 func (this *Testcase) FakeOrder() int{
-	var goods *Goods = &Goods{
+	var goods1 *Goods = &Goods{
 		Bn:"test01",
 		Id:1,
+	}
+	var goods2 *Goods = &Goods{
+		Bn:"YGDSB01",
+		Id:2,
 	}
 	Orderitems := []*OrderItem{
 		{
@@ -23,13 +27,20 @@ func (this *Testcase) FakeOrder() int{
 			Price:15.00,
 			PmtPrice:5.00,
 			Quantity:2,
-			Goods:goods,
+			Goods:goods1,
+		},
+		{
+			SalePrice:80.00,
+			Price:100.00,
+			PmtPrice:20.00,
+			Quantity:1,
+			Goods:goods2,
 		},
 	}
 	pmtGoods := []*PmtGoods{
 		{
-			Name:"购买任意商品优惠5元",
-			Price:5.00,
+			Name:"购买任意商品优惠30元",
+			Price:30.00,
 		},
 	}
 	pmtOrder := []*PmtOrder{
@@ -45,14 +56,14 @@ func (this *Testcase) FakeOrder() int{
 	OrderData := Order{
 		OrderBn:"TBN"+time.Now().Format(timeLayoutOrderBn),
 		OrderItem:Orderitems,
-		Payed:30.00,
+		Payed:110.00,
 		CustomRemark:"测试订单",
 		ServiceRemark:"客服备注111",
 		PayStatus:1,
-		TotalPrice:30.00,
-		GoodsPrice:30.00,
+		TotalPrice:110.00,
+		GoodsPrice:100.00,
 		ShipPrice:15.00,
-		PmtGoodsPrice:10.00,
+		PmtGoodsPrice:30.00,
 		PmtOrderPrice:5.00,
 		PmtGoods:pmtGoods,
 		PmtOrder:pmtOrder,
@@ -73,7 +84,7 @@ func (this *Testcase) FakeOrder() int{
 		logs.Error("这里？")
 		logs.Error(err)
 		logs.Error("这里!")
-		return 10
+		return 0
 	}else{
 		logs.Warn("创建成功"+strconv.Itoa(orderId))
 		return orderId
