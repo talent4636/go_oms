@@ -53,6 +53,10 @@ func init() {
 
 	//仓库模块
 	beego.Router("/branch", &branch.BranchController{}, "Get:Get")
+	beego.Router("/branch/add", &branch.BranchController{}, "Get:Edit")
+	beego.Router("/branch/edit/?:id", &branch.BranchController{}, "Get:Edit")
+	beego.Router("/branch/save", &branch.BranchController{}, "Post:Save")
+	beego.Router("/branch/delete/?:id", &branch.BranchController{}, "Post:Delete")
 
 	//testCase
 	beego.Router("/test/order", &testcase.TestController{},"Get:OrderCreate")
