@@ -13,6 +13,8 @@ type Branch struct {
 	Created  time.Time `orm:"auto_now_add;type(datetime)"`
 	Modified time.Time `orm:"auto_now;type(datetime)"`
 	IsSelf	 bool `orm:"column(is_self);default(true)"`
+	Store  	 []*Store `orm:"reverse(many)"`
+	IO	     []*IO `orm:"reverse(many)"`
 }
 
 func (mdlBranch *Branch) GetList(filters map[string]string, offset int, limit int) []Branch{

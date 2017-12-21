@@ -10,6 +10,7 @@ import (
 	"github.com/astaxie/beego/context"
 	"oms/controllers/testcase"
 	"oms/controllers/order"
+	"oms/controllers/store"
 )
 
 func init() {
@@ -57,6 +58,16 @@ func init() {
 	beego.Router("/branch/edit/?:id", &branch.BranchController{}, "Get:Edit")
 	beego.Router("/branch/save", &branch.BranchController{}, "Post:Save")
 	beego.Router("/branch/delete/?:id", &branch.BranchController{}, "Post:Delete")
+
+	//库存
+	beego.Router("/store/all", &store.StoreController{}, "Get:Get")
+	beego.Router("/store/branch", &store.StoreController{}, "Get:BranchStore")
+	beego.Router("/store/goods", &store.StoreController{}, "Get:GoodsStore")
+	beego.Router("/store/io", &store.IOController{}, "Get:Get")
+	beego.Router("/store/io/newin", &store.IOController{}, "Get:AddIn")
+	beego.Router("/store/io/newout", &store.IOController{}, "Get:AddOut")
+	beego.Router("/store/io/save", &store.IOController{}, "Post:SaveIO")
+	beego.Router("/store/inventory", &store.InventoryController{}, "Get:Get")
 
 	//testCase
 	beego.Router("/test/order", &testcase.TestController{},"Get:OrderCreate")

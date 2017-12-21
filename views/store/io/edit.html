@@ -1,0 +1,80 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form class="form-horizontal" id="branch-form" role="form" action="/store/io/save" method="POST">
+				<input type="hidden" name="type" value='{{if eq $.type "in"}}1{{else}}2{{end}}'>
+				<div class="form-group">
+					<label for="branch-name" class="col-sm-2 control-label">
+						仓库名称
+					</label>
+					<div class="col-sm-10">
+						<select name="branch_id">
+							{{ range $key,$branch := .branchs}}
+							<option value="{{$branch.Id}}">{{ $branch.Name }}</option>
+							{{ end }}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="branch-desc" class="col-sm-2 control-label">
+						商品
+					</label>
+					<div class="col-sm-10">
+                        <select name="goods_id">
+						{{ range $key,$goods := .goods }}
+                            <option value="{{$goods.Id}}">{{ $goods.Name }}</option>
+						{{ end }}
+                        </select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="branch-bn" class="col-sm-2 control-label">
+						{{if eq $.type "in"}}入{{else}}出{{end}}库数量
+					</label>
+					<div class="col-sm-10">
+						<input type="text" name="bn" value="{{ .branch.Bn}}" class="form-control" id="branch-bn" />
+					</div>
+				</div>
+				{{/*<div class="form-group">*/}}
+					{{/*<label for="branch-self" class="col-sm-2 control-label">*/}}
+						{{/*仓库名称*/}}
+					{{/*</label>*/}}
+					{{/*<div class="col-sm-10">*/}}
+						{{/*<input type="radio" name="is_self" checked="checked" value="true">自有仓库*/}}
+						{{/*<input type="radio" name="is_self" value="false">第三方仓储(暂不支持)*/}}
+					{{/*</div>*/}}
+				{{/*</div>*/}}
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default">
+						{{ if .branch.Id }}修改仓库信息{{ else }}创建仓库{{ end}}
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(function(){
+	    var options  = {
+            type: 'POST',
+            success:function(res){
+                //成功回调
+                if(res.result == 1){
+                    layer.msg(res.msg, {icon: 6, anim:6, offset:'t', time: 1500}, function(){
+                        parent.layer.closeAll()
+					});
+                }else{
+                    layer.msg(res.msg, {icon: 5, offset:'t', anim:6});
+                }
+            }
+        };
+        $("#branch-form").ajaxForm(options).submit(function(e){
+            return false;
+
+		});
+	});
+
+</script>

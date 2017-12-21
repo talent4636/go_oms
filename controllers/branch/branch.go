@@ -53,7 +53,7 @@ func (this *BranchController) Save(){
 		for key,value := range post{
 			Data[key] = value[0]
 		}
-		mdlBranch.Update();
+		//mdlBranch.Update();
 		this.Data["json"] = id;
 	}else{
 		var newBranch models.Branch = models.Branch{

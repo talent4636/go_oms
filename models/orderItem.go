@@ -32,7 +32,7 @@ func (item *OrderItem) GetItemByOrderId(order_id int) []*OrderItem{
 	}else{
 		//把goods信息也放进去
 		for key,itm := range items{
-			goods,_ := new(Goods).GetOne(itm.Goods.Id)
+			goods,_ := new(Goods).GetOneById(itm.Goods.Id)
 			items[key].Goods = &goods
 		}
 		return items

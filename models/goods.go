@@ -7,18 +7,20 @@ import (
 )
 
 type Goods struct {
-	Id       int 	 `orm:"column(goods_id)";pk:"auto"`
-	Name     string
-	Desc     string  `orm:"size(255);null"`
-	Bn       string  `orm:"unique"`
-	Cost     float32 `orm:"digits(10);decimals(2);default(0.00)"`
-	Price    float32 `orm:"digits(10);decimals(2);default(0.00)"`
-	PicUrl   string  `orm:"null"`
-	TypeId   int     //像这样的字段定义，会保存成 type_id
-	CatId    int
-	Created  time.Time `orm:"auto_now_add;type(datetime)"`
-	Modified time.Time `orm:"auto_now;type(datetime)"`
-	OrderItem []*OrderItem `orm:"reverse(many)"`
+	Id       	int 	 `orm:"column(goods_id)";pk:"auto"`
+	Name     	string
+	Desc     	string  `orm:"size(255);null"`
+	Bn       	string  `orm:"unique"`
+	Cost     	float32 `orm:"digits(10);decimals(2);default(0.00)"`
+	Price    	float32 `orm:"digits(10);decimals(2);default(0.00)"`
+	PicUrl   	string  `orm:"null"`
+	TypeId   	int     //像这样的字段定义，会保存成 type_id
+	CatId    	int
+	Created  	time.Time `orm:"auto_now_add;type(datetime)"`
+	Modified 	time.Time `orm:"auto_now;type(datetime)"`
+	OrderItem 	[]*OrderItem `orm:"reverse(many)"`
+	Store  		[]*Store `orm:"reverse(many)"`
+	IO	     	[]*IO `orm:"reverse(many)"`
 }
 
 func (this *Goods) GetAll() ([]Goods, error) {
@@ -28,11 +30,26 @@ func (this *Goods) GetAll() ([]Goods, error) {
 	return data, err
 }
 
-func (this *Goods) GetOne(goods_id int) ( Goods, error) {
+func (this *Goods) GetOneById(goods_id int) ( Goods, error) {
 	o := orm.NewOrm()
 	var data Goods
 	err := o.QueryTable("oms_goods").Filter("id",goods_id).One(&data)
 	return data, err
+}
+
+func (this *Goods) GetOne(filters map[string]interface{})(Goods){
+	o := orm.NewOrm()
+	var data Goods
+	tmp := o.QueryTable("oms_goods")
+	for key,value := range filters{
+		tmp = tmp.Filter(key,value)
+	}
+	_,err := tmp.All(&data)
+	if err!=nil{
+		return Goods{}
+	}else {
+		return data
+	}
 }
 
 func (this *Goods) Add(goods *Goods) (int, error) {

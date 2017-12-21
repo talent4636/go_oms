@@ -6,8 +6,10 @@ import (
 
 type Store struct {
 	Id			int
-	BranchId	int		`orm:"column(branch_id)"`
-	GoodsBn		string  `orm:"size(50);column(goods_bn)"`
+	//BranchId	int		`orm:"column(branch_id)"`
+	Branch		*Branch `orm:"column(branch_id);rel(fk)"`
+	Goods		*Goods  `orm:"column(goods_id);rel(fk)"`
+	//GoodsBn		string  `orm:"size(50);column(goods_bn)"`
 	Freeze		int		`orm:"default(0)"`
 	Store		int		`orm:"default(0)"`
 }
@@ -15,7 +17,7 @@ type Store struct {
 func (mdl *Store) GetList(filters map[string]interface{}) ([]*Store, error){
 	o := orm.NewOrm()
 	var data []*Store
-	tmp := o.QueryTable("ome_branch");
+	tmp := o.QueryTable("oms_store");
 	for key,value := range filters{
 		tmp = tmp.Filter(key,value)
 	}
@@ -28,9 +30,11 @@ func (mdl *Store) GetList(filters map[string]interface{}) ([]*Store, error){
 
 func (mdl *Store) Init(branch_id int, goods_bn string, store int, store_feeze int)(int, error){
 	o := orm.NewOrm()
+	branchInfo := new(Branch).GetOne(map[string]interface{}{"branch_id":branch_id})
+	goodsInfo := new(Goods).GetOne(map[string]interface{}{"bn":goods_bn})
 	storeData := Store{
-		BranchId:branch_id,
-		GoodsBn:goods_bn,
+		Branch:&branchInfo,
+		Goods:&goodsInfo,
 		Freeze:store_feeze,
 		Store:store,
 	}
@@ -57,9 +61,11 @@ func (mdl *Store) Change(branch_id int, goods_bn string, store int) (bool,error)
 	if _store,_storeFreeze,err := mdl.GetStore(branch_id, goods_bn);err!=nil{
 		return false, err
 	}else{
+		branchInfo := new(Branch).GetOne(map[string]interface{}{"branch_id":branch_id})
+		goodsInfo := new(Goods).GetOne(map[string]interface{}{"bn":goods_bn})
 		storeNew.Store = _store+store
-		storeNew.BranchId = branch_id
-		storeNew.GoodsBn = goods_bn
+		storeNew.Branch = &branchInfo
+		storeNew.Goods = &goodsInfo
 		storeNew.Freeze = _storeFreeze
 	}
 	if _,err := o.Update(&storeNew);err!=nil{

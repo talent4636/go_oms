@@ -23,7 +23,7 @@ func init() {
 	orm.RegisterModelWithPrefix("oms_", new(PmtOrder))
 	orm.RegisterModelWithPrefix("oms_", new(PmtGoods))
 	orm.RegisterModelWithPrefix("oms_", new(Store))
-	//orm.RegisterModelWithPrefix("oms_", new(BranchStore))
+	orm.RegisterModelWithPrefix("oms_", new(IO))
 	//END
 	orm.RunSyncdb("default", false, true) //第二个参数，true就强制更新表了
 }

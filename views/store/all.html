@@ -1,0 +1,119 @@
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">库存列表</div>
+    <div class="panel-body" style="padding: 5px;">
+        <!--这里是模块标题/名称-->
+
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <button type="button" class="btn btn-default">Middle</button>
+            <button type="button" class="btn btn-default">菜单1</button>
+            <button type="button" class="btn btn-default">菜单2</button>
+            <button type="button" class="btn btn-default">Right</button>
+        </div>
+    </div>
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr class="active">
+            <th>
+                序号
+            </th>
+            <th>
+                操作
+            </th>
+            <th>
+                仓库名称
+            </th>
+            <th>
+                货号
+            </th>
+            <th>
+                冻结库存
+            </th>
+            <th>
+                总库存
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range $key, $val := .stores}}
+        <tr>
+            <td>
+            {{$val.Id}}
+            </td>
+            <td>
+                <a target="_blank" class="edit-branch list-btn" data-href="/branch/edit/{{$val.Id}}">编辑</a>
+                <a data-url="/branch/delete/{{$val.Id}}" class="delete-branch list-btn">删除</a>
+            </td>
+            <td>
+            {{$val.Name}}
+            </td>
+            <td>
+            {{$val.Bn}}
+            </td>
+            <td>
+            {{$val.Desc}}
+            </td>
+            <td>
+            {{if eq $val.IsSelf true}}自有{{ else }}第三方{{ end }}
+            </td>
+            <td>
+            {{dateformat $val.Created "2006-01-02 15:04:05"}}
+            </td>
+            <td>
+            {{dateformat $val.Modified "2006-01-02 15:04:05"}}
+            </td>
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(function(){
+        //删除商品
+        $(".delete-branch").click(function(){
+            var _url = $(this).attr("data-url");
+            layer.confirm('确定要删除本仓库吗?', {icon: 3, title:'提示'}, function(index){
+                //确认之后的回调 ajax删除的事情
+                $.ajax({
+                    url:_url,
+                    type:"POST",
+                    success:function(res){
+                        if(res.result == 1){
+                            layer.msg(res.msg, {icon: 6, offset:'t', anim:6, time: 2000}, function(){
+                                _reloadPage();
+                            });
+                        }else{
+                            layer.msg(res.msg, {icon: 5, offset:'t', anim:6, time: 2000});
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        });
+
+        //增加或者新建
+        $(".new-branch, .edit-branch").click(function(){
+            var _url = $(this).attr("data-href");
+            layer.open({
+                type: 2,
+                content: _url,
+                title: "新增仓库",
+                area: ['800px', '600px'],
+                maxmin: true,
+                success: function(_e){
+                    //
+                },
+                end:function () {
+                    _reloadPage();//关闭后刷新页面
+                }
+            });
+        });
+
+        //刷新页面
+        var _reloadPage = function(){
+            location.reload();
+        }
+    });
+</script>

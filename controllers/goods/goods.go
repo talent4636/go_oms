@@ -34,7 +34,7 @@ func (this *GoodsController) Edit() {
 		this.Data["pageTitle"] = "新增商品"
 	}else{
 		mdlGoods := new(models.Goods)
-		data, _ := mdlGoods.GetOne(id)
+		data, _ := mdlGoods.GetOneById(id)
 		this.Data["goods"] = data
 		this.Data["cssPath"] = "./../../"
 		this.Data["title"] = "编辑商品"

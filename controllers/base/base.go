@@ -56,6 +56,38 @@ func NavData(url string, ctx *context.Context) map[string]interface{}{
 				},
 			},
 			4:map[string]interface{}{
+				"name":"库存",
+				"select":false,
+				"url":"/store",
+				"sub_nav":map[int]interface{}{
+					1:map[string]interface{}{
+						"name":"总库存",
+						"select":false,
+						"url":"/store/all",
+					},
+					2:map[string]interface{}{
+						"name":"单一仓库库存",
+						"select":false,
+						"url":"/store/branch",
+					},
+					3:map[string]interface{}{
+						"name":"单一货品库存",
+						"select":false,
+						"url":"/store/goods",
+					},
+					4:map[string]interface{}{
+						"name":"出入库",
+						"select":false,
+						"url":"/store/io",
+					},
+					5:map[string]interface{}{
+						"name":"盘点",
+						"select":false,
+						"url":"/store/inventory",
+					},
+				},
+			},
+			5:map[string]interface{}{
 				"name":"设置",
 				"select":false,
 				"url":"/setting",
