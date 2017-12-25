@@ -26,46 +26,70 @@
                 操作
             </th>
             <th>
+                状态
+            </th>
+            <th>
                 仓库名称
+            </th>
+            <th>
+                货品名称
             </th>
             <th>
                 货号
             </th>
             <th>
-                冻结库存
+                出/入库
             </th>
             <th>
-                总库存
+                数量
+            </th>
+            <th>
+                创建人
+            </th>
+            <th>
+                审核人
             </th>
         </tr>
         </thead>
         <tbody>
-        {{range $key, $val := .stores}}
+        {{range $key, $val := .ios}}
         <tr>
             <td>
             {{$val.Id}}
             </td>
             <td>
-                <a target="_blank" class="confirm-io list-btn" data-href="/branch/edit/{{$val.Id}}">审核</a>
-                <a data-url="/store/io/delete/{{$val.Id}}" class="cancel-io list-btn">作废</a>
+                {{if eq $val.Status 0}}
+                    <a target="_blank" class="confirm-io list-btn" data-href="/store/io/confirm/{{$val.Id}}">审核</a>
+                    <a data-href="/store/io/cancel/{{$val.Id}}" class="cancel-io list-btn">作废</a>
+                {{else}}
+                    无
+                {{end}}
             </td>
             <td>
-            {{$val.Name}}
+            {{if eq $val.Status 0}}未审核{{end}}
+            {{if eq $val.Status 1}}已审核{{end}}
+            {{if eq $val.Status 2}}已作废{{end}}
             </td>
             <td>
-            {{$val.Bn}}
+            {{$val.Branch.Name}}
             </td>
             <td>
-            {{$val.Desc}}
+            {{$val.Goods.Name}}
             </td>
             <td>
-            {{if eq $val.IsSelf true}}自有{{ else }}第三方{{ end }}
+            {{$val.Goods.Bn}}
             </td>
             <td>
-            {{dateformat $val.Created "2006-01-02 15:04:05"}}
+            {{if eq $val.Type 1}}入库{{ else }}出库{{ end }}
             </td>
             <td>
-            {{dateformat $val.Modified "2006-01-02 15:04:05"}}
+            {{$val.Number}}
+            </td>
+            <td>
+            {{$val.CreateBy}}@{{dateformat $val.Created "2006-01-02 15:04:05"}}
+            </td>
+            <td>
+            {{or $val.ConfirmBy "None"}}@{{dateformat $val.ConfirmAt "2006-01-02 15:04:05"}}
             </td>
         </tr>
         {{end}}
@@ -75,27 +99,49 @@
 
 <script>
     $(function(){
-        //删除商品
-        // $(".delete-branch").click(function(){
-        //     var _url = $(this).attr("data-url");
-        //     layer.confirm('确定要删除本仓库吗?', {icon: 3, title:'提示'}, function(index){
-        //         //确认之后的回调 ajax删除的事情
-        //         $.ajax({
-        //             url:_url,
-        //             type:"POST",
-        //             success:function(res){
-        //                 if(res.result == 1){
-        //                     layer.msg(res.msg, {icon: 6, offset:'t', anim:6, time: 2000}, function(){
-        //                         _reloadPage();
-        //                     });
-        //                 }else{
-        //                     layer.msg(res.msg, {icon: 5, offset:'t', anim:6, time: 2000});
-        //                 }
-        //             }
-        //         });
-        //         layer.close(index);
-        //     });
-        // });
+        //审核出入库单
+        $(".confirm-io").click(function(){
+            var _url = $(this).attr("data-href");
+            layer.confirm('确定要审核通过该出入库单吗?', {icon: 3, title:'提示'}, function(index){
+                //确认之后的回调 ajax删除的事情
+                $.ajax({
+                    url:_url,
+                    type:"POST",
+                    success:function(res){
+                        if(res.result == 1){
+                            layer.msg(res.msg, {icon: 6, offset:'t', anim:6, time: 2000}, function(){
+                                _reloadPage();
+                            });
+                        }else{
+                            layer.msg(res.msg, {icon: 5, offset:'t', anim:6, time: 2000});
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        });
+
+        //作废出入库单
+        $(".cancel-io").click(function(){
+            var _url = $(this).attr("data-href");
+            layer.confirm('确定要作废该出入库单吗?', {icon: 3, title:'提示'}, function(index){
+                //确认之后的回调 ajax删除的事情
+                $.ajax({
+                    url:_url,
+                    type:"POST",
+                    success:function(res){
+                        if(res.result == 1){
+                            layer.msg(res.msg, {icon: 6, offset:'t', anim:6, time: 2000}, function(){
+                                _reloadPage();
+                            });
+                        }else{
+                            layer.msg(res.msg, {icon: 5, offset:'t', anim:6, time: 2000});
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        });
 
         $(".new-in, .edit-branch").click(function(){
             var _url = $(this).attr("data-href");

@@ -18,7 +18,7 @@ type IO struct{
 	ConfirmBy	string	`orm:"confirm_by;null"` //审核人
 }
 
-func (io *IO) GetList(filters map[string]string, offset int, limit int) []IO{
+func (io *IO) GetList(filters map[string]interface{}, offset int, limit int) []IO{
 	o := orm.NewOrm()
 	var data []IO
 	tmp := o.QueryTable("oms_io")
@@ -29,11 +29,78 @@ func (io *IO) GetList(filters map[string]string, offset int, limit int) []IO{
 	if err!=nil{
 		return nil
 	}else{
+		mdlGoods := new(Goods)
+		mdlBranch := new(Branch)
+		for k,v := range data{
+			goods,_ := mdlGoods.GetOneById(v.Goods.Id)
+			branch := mdlBranch.GetOne(map[string]interface{}{"id":v.Branch.Id})
+			data[k].Goods = &goods
+			data[k].Branch = &branch
+		}
 		return data
+	}
+}
+
+func (io *IO) GetOne(io_id int) *IO {
+	ioInfo := io.GetList(map[string]interface{}{"id":io_id},0,1)[0]
+	return &ioInfo
+}
+
+func (io *IO) Update(io_id int, modifyData map[string]interface{}) (bool,error){
+	o := orm.NewOrm()
+	if _,err := o.QueryTable("oms_io").Filter("id",io_id).Update(modifyData);err!=nil{
+		return false,err
+	}else{
+		return true,nil
 	}
 }
 
 //返回表名
 func (io *IO) TableName() string {
 	return "io"
+}
+
+func (io *IO) New(ioPnt *IO) bool{
+	o:=orm.NewOrm()
+	if _,err := o.Insert(ioPnt);err!=nil{
+		return false;
+	}else{
+		return true;
+	}
+}
+
+func (io *IO) Cancel(io_id int) bool{
+	if _,err := io.Update(io_id,map[string]interface{}{"status":2,"confirm_at":time.Now(),});err!=nil{
+		return false;
+	}else{
+		return true;
+	}
+}
+
+func (io *IO) Confirm(io_id int) bool {
+	o := orm.NewOrm()
+	o.Begin()
+	if _,err := io.Update(io_id,map[string]interface{}{"status":1,"confirm_at":time.Now(),});err!=nil{
+		o.Rollback()
+		return false;
+	}else{
+		//审核通过了，就开始改库存
+		ioInfo := io.GetOne(io_id)
+		mdlStore := new(Store)
+		var res bool
+		var err error
+		if ioInfo.Type == 1{
+			res,err = mdlStore.In(ioInfo.Branch.Id, ioInfo.Goods.Id, ioInfo.Number)
+		}else{
+			res,err = mdlStore.Out(ioInfo.Branch.Id, ioInfo.Goods.Id, ioInfo.Number)
+		}
+
+		if err!=nil || res==false{
+			o.Rollback()
+			return false;
+		}else{
+			o.Commit()
+			return true;
+		}
+	}
 }

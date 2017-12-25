@@ -68,6 +68,8 @@ func init() {
 	beego.Router("/store/io/newout", &store.IOController{}, "Get:AddOut")
 	beego.Router("/store/io/save", &store.IOController{}, "Post:SaveIO")
 	beego.Router("/store/inventory", &store.InventoryController{}, "Get:Get")
+	beego.Router("/store/io/cancel/?:id", &store.IOController{}, "Post:Cancel")
+	beego.Router("/store/io/confirm/?:id", &store.IOController{}, "Post:Confirm")
 
 	//testCase
 	beego.Router("/test/order", &testcase.TestController{},"Get:OrderCreate")

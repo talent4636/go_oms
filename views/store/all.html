@@ -46,22 +46,16 @@
                 <a data-url="/branch/delete/{{$val.Id}}" class="delete-branch list-btn">删除</a>
             </td>
             <td>
-            {{$val.Name}}
+            {{$val.Branch.Name}}
             </td>
             <td>
-            {{$val.Bn}}
+            {{$val.Goods.Name}}[{{$val.Goods.Bn}}]
             </td>
             <td>
-            {{$val.Desc}}
+            {{$val.Freeze}}
             </td>
             <td>
-            {{if eq $val.IsSelf true}}自有{{ else }}第三方{{ end }}
-            </td>
-            <td>
-            {{dateformat $val.Created "2006-01-02 15:04:05"}}
-            </td>
-            <td>
-            {{dateformat $val.Modified "2006-01-02 15:04:05"}}
+            {{$val.Store}}
             </td>
         </tr>
         {{end}}
