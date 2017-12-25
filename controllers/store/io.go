@@ -64,15 +64,9 @@ func (this *IOController) SaveIO(){
 	branch_id,_ := strconv.Atoi(this.Input()["branch_id"][0])
 	goods_id,_ := strconv.Atoi(this.Input()["goods_id"][0])
 	number,_ := strconv.Atoi(this.Input()["number"][0])
-	_type := this.Input()["type"][0]
-	var ioType int
-	if _type=="in"{
-		ioType=1
-	}else{
-		ioType=2
-	}
+	_type,_ := strconv.Atoi(this.Input()["type"][0])
 	var ioData *models.IO = &models.IO{
-		Type:ioType,
+		Type:_type,
 		Branch:&models.Branch{
 			Id:branch_id,
 		},
