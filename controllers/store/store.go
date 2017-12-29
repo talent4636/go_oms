@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"oms/models"
 	"oms/controllers/base"
+	"strconv"
 )
 
 type StoreController struct {
@@ -24,7 +25,28 @@ func (this *StoreController) Get(){
 }
 
 func (this *StoreController) BranchStore(){
-	this.Data["json"] = "store branch store"
+	this.Data["_BASE"] = base.NavData("/store/branch", this.Ctx)
+	this.Data["cssPath"] = "../"
+	mdlBranch := new(models.Branch)
+	branchList := mdlBranch.GetList(nil,0,20)
+	//this.Data["json"] = branchList
+	//this.ServeJSON()
+	this.Data["branchs"] = branchList
+	this.Layout = "layout/main.html"
+	this.TplName = "store/select.html"
+}
+
+func (this *StoreController) BranchStoreList(){
+	if id, err := strconv.Atoi(this.Ctx.Input.Param(":id")); err != nil {
+		this.Data["json"] = map[string]interface{}{"result":0,"msg":"仓库ID为空，请刷新重试"}
+	}else{
+		mdlStore := new(models.Store)
+		if stores,err := mdlStore.GetList(map[string]interface{}{"branch_id":id});err!=nil{
+			this.Data["json"] = map[string]interface{}{"result":0,"msg":"查询失败，请重试"}
+		}else{
+			this.Data["json"] = map[string]interface{}{"result":1,"msg":"","data":stores}
+		}
+	}
 	this.ServeJSON()
 }
 

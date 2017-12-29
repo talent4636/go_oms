@@ -62,6 +62,7 @@ func init() {
 	//库存
 	beego.Router("/store/all", &store.StoreController{}, "Get:Get")
 	beego.Router("/store/branch", &store.StoreController{}, "Get:BranchStore")
+	beego.Router("/store/branch/?:id", &store.StoreController{}, "Post:BranchStoreList")
 	beego.Router("/store/goods", &store.StoreController{}, "Get:GoodsStore")
 	beego.Router("/store/io", &store.IOController{}, "Get:Get")
 	beego.Router("/store/io/newin", &store.IOController{}, "Get:AddIn")
