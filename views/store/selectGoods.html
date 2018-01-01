@@ -1,0 +1,76 @@
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading" id="branch-name-title">商品列表，请选择一个</div>
+    <div class="panel-body" style="padding: 5px;">
+        {{ range $key,$value := .goods }}
+        <button type="button" class="btn btn-primary">
+            <a style="color:#FFFFFF;" class="ajax-get-store" data-href="/store/goods/{{$value.Id}}">
+                {{$value.Name}} ({{$value.Bn}})
+            </a>
+        </button>
+        {{end}}
+    </div>
+    <div>
+        <table class="table">
+            <thead>
+            <tr class="active">
+                <th>
+                    仓库名称
+                </th>
+                <th>
+                    仓库编号
+                </th>
+                <th>
+                    库存
+                </th>
+                <th>
+                    冻结库存
+                </th>
+            </tr>
+            </thead>
+            <tbody id="list-box">
+                <tr><td>无数据</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    var listBox = $("#list-box");
+    var branchNameTitle = $("#branch-name-title");
+    $(".ajax-get-store").click(function(){
+        var _url = $(this).attr("data-href");
+        var index = layer.load(1, {
+            shade: [0.1,'#fff'] //0.1透明度的白色背景
+        });
+        listBox.empty();
+        branchNameTitle.text('现在查看的是：【'+this.innerText+'】的库存');
+        $.ajax({
+            url:_url,
+            type:"POST",
+            success:function(res){
+                if(res.result == 1){
+                    var childHtml = '';
+                    if(res.data.length == 0){
+                        childHtml = "<tr><td>无数据</td></tr>"
+                    }else{
+                        res.data.forEach(function (value) {
+                            console.log(value);
+                            childHtml += "<tr>";
+                            childHtml += "<td>"+value.Branch.Name+"</td>";
+                            childHtml += "<td>"+value.Branch.Bn+"</td>";
+                            childHtml += "<td>"+value.Store+"</td>";
+                            childHtml += "<td>"+value.Freeze+"</td>";
+                            childHtml += "</tr>";
+                        })
+                    }
+                    listBox.append(childHtml);
+                }else{
+                    layer.msg(res.msg, {icon: 5, offset:'t', anim:6, time: 2000});
+                }
+            }
+        });
+        layer.close(index);
+    });
+</script>
+

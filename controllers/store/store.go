@@ -33,7 +33,7 @@ func (this *StoreController) BranchStore(){
 	//this.ServeJSON()
 	this.Data["branchs"] = branchList
 	this.Layout = "layout/main.html"
-	this.TplName = "store/select.html"
+	this.TplName = "store/selectBranch.html"
 }
 
 func (this *StoreController) BranchStoreList(){
@@ -51,6 +51,25 @@ func (this *StoreController) BranchStoreList(){
 }
 
 func (this *StoreController) GoodsStore(){
-	this.Data["json"] = "store goods store"
+	this.Data["_BASE"] = base.NavData("/store/goods", this.Ctx)
+	this.Data["cssPath"] = "../"
+	mdlGoods := new(models.Goods)
+	goodsList,_ := mdlGoods.GetAll()
+	this.Data["goods"] = goodsList
+	this.Layout = "layout/main.html"
+	this.TplName = "store/selectGoods.html"
+}
+
+func (this *StoreController) GoodsStoreList(){
+	if id, err := strconv.Atoi(this.Ctx.Input.Param(":id")); err != nil {
+		this.Data["json"] = map[string]interface{}{"result":0,"msg":"商品ID为空，请刷新重试"}
+	}else{
+		mdlStore := new(models.Store)
+		if stores,err := mdlStore.GetList(map[string]interface{}{"goods_id":id});err!=nil{
+			this.Data["json"] = map[string]interface{}{"result":0,"msg":"查询失败，请重试"}
+		}else{
+			this.Data["json"] = map[string]interface{}{"result":1,"msg":"","data":stores}
+		}
+	}
 	this.ServeJSON()
 }
