@@ -9,7 +9,7 @@ import (
 func init() {
 	orm.DefaultTimeLoc = time.UTC //这里有问题，时区不对
 	orm.RegisterDriver("mysql", orm.DRMySQL)
-	orm.RegisterDataBase("default", "mysql", "root:passw0rd@/beego_oms?charset=utf8")
+	orm.RegisterDataBase("default", "mysql", "root:passw0rd@/beego_oms?charset=utf8&loc-Local")
 	//	orm.RegisterModel(new(User))
 	orm.SetMaxIdleConns("default", 30)
 	orm.SetMaxOpenConns("default", 30)
